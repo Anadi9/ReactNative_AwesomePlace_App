@@ -2,46 +2,39 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import shortid from 'shortid';
 import Appbar from './components/Appbar';
-import PlaceInput from './components/PlaceInput';
-import PlaceList from './components/PlaceList';
+import TeamNameInput from './components/TeamNameInput';
+import TeamList from './components/TeamList';
+import TeamDetails from './components/TeamDetails';
+import { connect } from 'react-redux';
+import { addTeam, deleteTeam, selectTeam, deselectTeam } from './store/actions/index';
 
 
-export default class Searchbar extends Component {
+class App extends Component {
 
-    state = {
-        places: [],
-    };
-
-
-    placeAddedHandler = placeName => {
-        this.setState(prevState => {
-            return {
-              places: prevState.places.concat({
-                key: shortid.generate(),
-                value: placeName,
-              }),
-            };
-        });
+    teamAddedHandler = teamName => {
+      this.props.onAddTeam(teamName);
     };
   
-  placeDeletedHandler = key => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.filter(place => {
-          return place.key !== key;
-        })
-      };
-    });
+    teamDeletedHandler = () => {
+      this.props.onDeleteTeam();
+    };
+  
+    modalClosedHandler = () => {
+      this.props.onDeselectTeam();
+    };
+  
+  teamSelectedHandler = key => {
+    this.props.onSelectTeam(key);
   };
 
     render() {
         return (
           <View style={styles.container}>
-            <Appbar/>
-            <PlaceInput onPlaceAdded={this.placeAddedHandler} />
-            <PlaceList places={this.state.places} onItemDeleted={this.placeDeletedHandler} />
+            <Appbar />
+            <TeamNameInput onTeamAdded={this.teamAddedHandler} />
+            <TeamList teams={this.props.teams} onItemSelected={this.teamSelectedHandler} />
+            <TeamDetails selectedTeam={this.props.selectedTeam} onTeamDeleted={this.teamDeletedHandler} onModalClosed={this.modalClosedHandler} />
           </View>
         );
       }
@@ -55,3 +48,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 });
+
+
+const mapStateToProps = state => {
+  return {
+    teams: state.teams.teams,
+    selectedTeam: state.teams.selectedTeam,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddTeam: (name) => dispatch(addTeam(name)),
+    onDeleteTeam: () => dispatch(deleteTeam()),
+    onSelectTeam: (key) => dispatch(selectTeam(key)),
+    onDeselectTeam: () => dispatch(deselectTeam()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

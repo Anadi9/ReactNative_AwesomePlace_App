@@ -2,38 +2,39 @@
 import React, {Component} from 'react';
 import {View, TextInput, Button, StyleSheet} from 'react-native';
 
-class PlaceInput extends Component {
+class TeamNameInput extends Component {
   state = {
-    placeName: '',
+    teamName: '',
   };
 
-  placeNameChangedHandler = (val) => {
+  teamNameChangedHandler = (val) => {
     this.setState({
-      placeName: val,
+      teamName: val,
     });
   };
 
-  placeSubmitHandler = () => {
-    if (this.state.placeName.trim() === '') {
+  teamSubmitHandler = () => {
+    if (this.state.teamName.trim() === '') {
       return;
     }
 
-    this.props.onPlaceAdded(this.state.placeName);
+    this.props.onTeamAdded(this.state.teamName);
   };
 
   render() {
     return (
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="An awesome place"
-          value={this.state.placeName}
-          onChangeText={this.placeNameChangedHandler}
-          style={styles.placeInput}
+          placeholder="An awesome team"
+          value={this.state.teamName}
+          onChangeText={this.teamNameChangedHandler}
+          style={styles.teamInput}
         />
         <Button
           title="Add"
-          style={styles.placeButton}
-          onPress={this.placeSubmitHandler}
+          color="#000"
+          style={styles.teamButton}
+          onPress={this.teamSubmitHandler}
         />
       </View>
     );
@@ -48,12 +49,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  placeInput: {
+  teamInput: {
     width: '70%',
   },
-  placeButton: {
+  teamButton: {
     width: '30%',
   },
 });
 
-export default PlaceInput;
+export default TeamNameInput;

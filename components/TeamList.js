@@ -4,10 +4,10 @@ import { StyleSheet, FlatList } from 'react-native';
 
 import ListItem from './ListItem';
 
-const PlaceList = props => {
+const TeamList = props => {
     return (
-        <FlatList style={styles.listContainer} data={props.places} renderItem={(info) => (
-            <ListItem placeName={info.item.value} onItemPressed={() => props.onItemDeleted(info.item.key)} />
+        <FlatList style={styles.listContainer} data={props.teams} renderItem={(info) => (
+            <ListItem teamName={info.item.name} teamImg={info.item.image} onItemPressed={() => props.onItemSelected(info.item.key)} />
         )} />
     );
 };
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PlaceList;
+export default TeamList;
